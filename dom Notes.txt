@@ -1,0 +1,29 @@
+** creating the elements and modifying the dom with js
+
+=> doucment.createelment - creates and returns a new element of the type specified.
+=> doucment.createTextNode(text) - creates a text node (the text within an element vs the element itself);
+thye methods shown above just create the elemensts or text nodes but it donesnt append it to the webpage to append it into the html we use append child 
+such as:
+document.body.appendChild();
+if we instead wanted to place it within an existing id( to select id form query selector use "doucment.querySelector('#id')) so after that we can insert the paragarph or any given ellemnet into the selected elements
+
+*** new learned : we can use .insertBefore(new,old); to accomplish something similar so it will add the new node before the old node ****
+** removing a node from the HTML or from the specific element***
+use removeChild()
+
+**** Inspecting, modifying a DOM elements with js
+element Properties:
+element.id
+element.innerHTML
+element.parentNode
+element.nextSibling
+element.className
+
+element methods:
+element.querySelector
+element.querySelectorAll
+element.scrollIntoView
+element.hasAttridbute
+element.getAttribute
+element.setAttribute
+element.removeAttribute
