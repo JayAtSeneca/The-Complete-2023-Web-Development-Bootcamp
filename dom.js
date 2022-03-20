@@ -1,11 +1,14 @@
-//document.addEventListener('DOMContentLoaded',start);
-document.addEventListener('load',(event)=>{
-    alert('Page Loaded');
+window.addEventListener('load',()=>{
+
+    
+    
+        let elem = document.createElement('button');
+        elem.id = 'button';
+        elem.innerHTML = `category 1`;
+        elem.style.fontSize = "15px";
+        elem.style.width = "100px";
+        elem.style.height = "50px";
+        elem.style.margin = "50px";
+        document.body.appendChild(elem);         
+    
 })
-function start()
-{
-    let elem = document.querySelector('body');
-    let temp = document.createElement('h1');
-    temp.innerText = 'HELLO WORLD';
-    elem.appendChild(temp);
-}
