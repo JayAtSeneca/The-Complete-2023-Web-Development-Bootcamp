@@ -34,6 +34,13 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
+const listSchema = {
+  name: String,
+  items: [itemsSchema],
+};
+
+const List = mongoose.model("List", listSchema);
+
 app.get("/", function (req, res) {
   Item.find({}, (err, foundItems) => {
     if (foundItems.length === 0) {
@@ -45,28 +52,73 @@ app.get("/", function (req, res) {
         }
       });
       res.redirect("/");
+    } else {
+      res.render("list", { listTitle: "Today", newListItems: foundItems });
     }
-    else{
-    res.render("list", { listTitle: "Today", newListItems: foundItems });
+  });
+});
+
+app.get("/:customListName", (req, res) => {
+  const customListName = req.params.customListName;
+
+  List.findOne({ name: customListName }, (err, foundedList) => {
+    if (!err) {
+      if (!foundedList) {
+        // Create a new list
+        const list = new List({
+          name: customListName,
+          items: defaultItems,
+        });
+        list.save();
+        res.redirect("/" + customListName);
+      } else {
+        // Show an existing list
+        res.render("list", {
+          listTitle: foundedList.name,
+          newListItems: foundedList.items,
+        });
+      }
     }
   });
 });
 
 app.post("/", function (req, res) {
   const itemName = req.body.newItem;
-  if(itemName){
-  const item = new Item({
-    name: itemName,
-  });
-  item.save();
+  const listName = req.body.list;
+
+  if (itemName) {
+
+    const item = new Item({
+      name: itemName,
+    });
+    
+    if (listName === "Today") {
+
+      item.save();
+      res.redirect("/");
+
+    } else {
+
+      List.findOne({ name: listName }, (err, foundedList) => {
+        foundedList.items.push(item);
+        foundedList.save();
+        res.redirect("/" + listName);
+      });
+
+    }
   }
-  res.redirect("/");
+  if(listName === "Today") {
+    res.redirect("/");
+  }
+  else{
+    res.redirect("/" + listName);
+  }
 });
 
-app.post("/delete",(req,res)=>{
+app.post("/delete", (req, res) => {
   const checkedItemId = req.body.checkbox;
-  Item.findByIdAndRemove(checkedItemId,(err)=>{
-    if(!err){
+  Item.findByIdAndRemove(checkedItemId, (err) => {
+    if (!err) {
       console.log("Successfully deleted checked item.");
       res.redirect("/");
     }
